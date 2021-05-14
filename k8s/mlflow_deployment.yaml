@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: mlflow-deployment
-        image: pdemeulenaer/mlflow-server:426  #dkhundley/mlflow-server:1.0.3
+        image: image-registry.openshift-image-registry.svc:5000/pdemeulenaer-dev/mlflow-on-kubernetes:latest #pdemeulenaer/mlflow-server:426  #dkhundley/mlflow-server:1.0.3
         imagePullPolicy: Always
         args:
         - --host=0.0.0.0
