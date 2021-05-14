@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: mlflow-postgres
-        image: postgres:11
+        image: image-registry.openshift-image-registry.svc:5000/openshift/postgresql:latest #postgres:11
         ports:
         - containerPort: 5432
           protocol: TCP
