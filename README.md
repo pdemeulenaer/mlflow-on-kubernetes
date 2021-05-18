@@ -1,6 +1,8 @@
 # mlflow-on-kubernetes
 deploying MLflow on Minikube and Openshift 4
 
+Adapted from https://towardsdatascience.com/mlflow-part-2-deploying-a-tracking-server-to-minikube-a2d6671e6455 
+
 We need first an MLflow docker image, such as in https://github.com/pdemeulenaer/mlflow-image 
 
 # How to deploy MLflow on Openshift?
