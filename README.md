@@ -47,3 +47,14 @@ route.route.openshift.io/mlflow-service exposed
 
 Almost same, just the route creation is not needed, Ingress solution working
 
+One thing to note is that minikube does not have the same route system as in Openshift, and instead uses the ingress addon. To enable the addon in minikube:
+
+minikube addons list
+minikube addons enable ingress
+
+Then get the minikube cluster ip address:
+
+minikube ip
+
+Then we modify the /etc/hosts file (following https://towardsdatascience.com/mlflow-part-2-deploying-a-tracking-server-to-minikube-a2d6671e6455) so that the browser translates “localhost” to your local IP address. Paste the minikube IP address (which is 192.168.64.4 in my case) followed by BOTH host names for the MLflow server and Minio artifact store (mlflow-server.local and mlflow-minio.local).
+
