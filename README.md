@@ -13,55 +13,55 @@ $ oc login --token=sha256~some_token --server=some-os4-server:port
 
 $ kubectl apply -f mlflow_postgres.yaml
 
-configmap/mlflow-postgres-config created
+    configmap/mlflow-postgres-config created
 
-statefulset.apps/mlflow-postgres created
+    statefulset.apps/mlflow-postgres created
 
-service/mlflow-postgres-service created
+    service/mlflow-postgres-service created
 
 $ kubectl apply -f mlflow_minio.yaml 
 
-deployment.apps/mlflow-minio created
+    deployment.apps/mlflow-minio created
 
-service/mlflow-minio-service created
+    service/mlflow-minio-service created
 
-Warning: networking.k8s.io/v1beta1 Ingress is deprecated in v1.19+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
+    Warning: networking.k8s.io/v1beta1 Ingress is deprecated in v1.19+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
 
-ingress.networking.k8s.io/mlflow-minio-ingress created
+    ingress.networking.k8s.io/mlflow-minio-ingress created
 
-persistentvolumeclaim/mlflow-pvc created
+    persistentvolumeclaim/mlflow-pvc created
 
 $ oc get pods,services
 
-NAME                                READY   STATUS              RESTARTS   AGE
+    NAME                                READY   STATUS              RESTARTS   AGE
 
-pod/mlflow-minio-64447c6687-bs9rm   0/1     ContainerCreating   0          12s
+    pod/mlflow-minio-64447c6687-bs9rm   0/1     ContainerCreating   0          12s
 
-pod/mlflow-postgres-0               0/1     ContainerCreating   0          44s
+    pod/mlflow-postgres-0               0/1     ContainerCreating   0          44s
 
-NAME                              TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+    NAME                              TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
 
-service/mlflow-minio-service      NodePort   172.30.133.80   <none>        9000:31586/TCP   12s
+    service/mlflow-minio-service      NodePort   172.30.133.80   <none>        9000:31586/TCP   12s
 
-service/mlflow-postgres-service   NodePort   172.30.173.63   <none>        5432:30221/TCP   44s
+    service/mlflow-postgres-service   NodePort   172.30.173.63   <none>        5432:30221/TCP   44s
 
 Here I need to change the CLUSTER-IP in the manifest mlflow_deployment.yaml for minio and postgres adresses. Manual step so far...
 
 $ kubectl apply -f mlflow_deployment.yaml 
 
-deployment.apps/mlflow-deployment created
+    deployment.apps/mlflow-deployment created
 
-service/mlflow-service created
+    service/mlflow-service created
 
-Warning: networking.k8s.io/v1beta1 Ingress is deprecated in v1.19+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
+    Warning: networking.k8s.io/v1beta1 Ingress is deprecated in v1.19+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
 
-ingress.networking.k8s.io/mlflow-ingress created
+    ingress.networking.k8s.io/mlflow-ingress created
 
 Then for openshift we need to create a route: 
 
 $ oc expose service/mlflow-service
 
-route.route.openshift.io/mlflow-service exposed
+    route.route.openshift.io/mlflow-service exposed
 
 # How to deploy MLflow on Minikube?
 
@@ -75,5 +75,7 @@ Then get the minikube cluster ip address:
 
 $ minikube ip
 
-Then we modify the /etc/hosts file (following https://towardsdatascience.com/mlflow-part-2-deploying-a-tracking-server-to-minikube-a2d6671e6455) so that the browser translates “localhost” to your local IP address. Paste the minikube IP address (which is 192.168.64.4 in my case) followed by BOTH host names for the MLflow server and Minio artifact store (mlflow-server.local and mlflow-minio.local).
+Then we modify the /etc/hosts file (following https://towardsdatascience.com/mlflow-part-2-deploying-a-tracking-server-to-minikube-a2d6671e6455) so that the browser translates “localhost” to your local IP address. Paste the minikube IP address (which is 192.168.99.104 in my case) followed by BOTH host names for the MLflow server and Minio artifact store (mlflow-server.local and mlflow-minio.local)
+
+    192.168.99.104 mlflow-server.local mlflow-minio.local
 
