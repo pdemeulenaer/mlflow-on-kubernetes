@@ -5,7 +5,8 @@ Adapted from https://towardsdatascience.com/mlflow-part-2-deploying-a-tracking-s
 
 ## Folder structure & pre-requisites
 
-* Folder structure:
+Folder structure:
+
     .
     ├── Dockerfile
     ├── example
@@ -18,7 +19,7 @@ Adapted from https://towardsdatascience.com/mlflow-part-2-deploying-a-tracking-s
     │   └── mlflow_postgres.yaml
     └── README.md
 
-* Needed images:
+Needed images:
 
 - MLflow: As we will need a MLflow docker image in the mlflow_deployment.yaml manifest, look at  https://github.com/pdemeulenaer/mlflow-image to produce such, or simply use the DockerHub image pdemeulenaer/mlflow-server:537
 
