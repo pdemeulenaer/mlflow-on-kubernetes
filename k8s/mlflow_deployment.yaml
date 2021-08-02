@@ -15,21 +15,23 @@ spec:
     spec:
       containers:
       - name: mlflow-deployment
-        image: image-registry.openshift-image-registry.svc:5000/pdemeulenaer-dev/mlflow-on-kubernetes:latest #pdemeulenaer/mlflow-server:426  #dkhundley/mlflow-server:1.0.3
-        imagePullPolicy: Always
+        image: pdemeulenaer/mlflow-server:537 #image-registry.openshift-image-registry.svc:5000/pdemeulenaer-dev/mlflow-on-kubernetes-image:latest #pdemeulenaer/mlflow-server:537  #dkhundley/mlflow-server:1.0.3
+        imagePullPolicy: IfNotPresent #Always
         args:
         - --host=0.0.0.0
         - --port=5000
-        - --backend-store-uri=postgresql://mlflow_user:mlflow_pwd@172.30.173.63:5432/mlflow_db
+        - --backend-store-uri=postgresql://mlflow_user:mlflow_pwd@10.98.46.211:5432/mlflow_db
         - --default-artifact-root=s3://mlflow/
         - --workers=2
         env:
         - name: MLFLOW_S3_ENDPOINT_URL
-          value: http://172.30.133.80:9000/
+          value: http://10.105.188.217:9000/ #http://mlflow-minio.local:9000/ #http://10.107.136.231:9000/
         - name: AWS_ACCESS_KEY_ID
-          value: "minio"
+          value: "minioadmin" #"minio"
         - name: AWS_SECRET_ACCESS_KEY
-          value: "minio123"
+          value: "minioadmin" #"minio123"
+        # - name: MLFLOW_S3_IGNORE_TLS
+        #   value: "true"
         ports:
         - name: http
           containerPort: 5000

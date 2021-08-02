@@ -59,10 +59,10 @@ with mlflow.start_run():
     mlflow.log_metric('r2', r2)
 
     # Logging training data
-    # mlflow.log_artifact(local_path = 'train.csv')
+    mlflow.log_artifact(local_path = 'train.csv')
 
     # # Logging training code
-    # mlflow.log_artifact(local_path = 'train.py')
+    mlflow.log_artifact(local_path = 'train.py')
 
     # # Logging model to MLFlow
     mlflow.sklearn.log_model(model, 'model')

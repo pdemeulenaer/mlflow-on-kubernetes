@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: mlflow-minio
 spec:
+  strategy:        #new
+    type: Recreate #new
   selector:
     matchLabels:
       app: mlflow-minio
@@ -12,23 +14,24 @@ spec:
         app: mlflow-minio
     spec:
       volumes:
-      - name: mlflow-pvc
+      - name: mlflow-pvc-2
         persistentVolumeClaim:
-          claimName: mlflow-pvc
+          claimName: mlflow-pvc-2
       containers:
       - name: mlflow-minio
-        image: minio/minio:latest
+        image: minio/minio:RELEASE.2020-07-27T18-37-02Z #minio/minio:RELEASE.2021-04-18T19-26-29Z #minio/minio:RELEASE.2021-03-17T02-33-02Z #default-route-openshift-image-registry.apps.sandbox-m2.ll9k.p1.openshiftapps.com/pdemeulenaer-dev/minio #minio/minio:latest  # minio/minio:RELEASE.2020-12-03T05-49-24Z
+        imagePullPolicy: IfNotPresent #Always
         args:
         - server
         - /data
         volumeMounts:
-        - name: mlflow-pvc
+        - name: mlflow-pvc-2
           mountPath: '/data'
         env:
-        - name: MINIO_ACCESS_KEY
-          value: "minio"
-        - name: MINIO_SECRET_KEY
-          value: "minio123"
+        - name: MINIO_ACCESS_KEY #MINIO_ROOT_USER #MINIO_ACCESS_KEY
+          value: "minioadmin" #"minio"
+        - name: MINIO_SECRET_KEY #MINIO_ROOT_PASSWORD #MINIO_SECRET_KEY
+          value: "minioadmin" #"minio123"
         ports:
         - containerPort: 9000
 ---
@@ -42,8 +45,9 @@ spec:
   - port: 9000
     targetPort: 9000
     protocol: TCP
+    name: http
   selector:
-    app: mlflow-minio
+    app: mlflow-minio 
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -66,7 +70,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mlflow-pvc
+  name: mlflow-pvc-2
 spec:
   accessModes:
     - ReadWriteOnce

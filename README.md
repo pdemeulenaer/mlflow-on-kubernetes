@@ -21,23 +21,29 @@ Folder structure:
 
 Needed images:
 
-- MLflow: As we will need a MLflow docker image in the mlflow_deployment.yaml manifest, look at  https://github.com/pdemeulenaer/mlflow-image to produce such, or simply use the DockerHub image pdemeulenaer/mlflow-server:537
+- **MLflow**: As we will need a MLflow docker image in the mlflow_deployment.yaml manifest, look at  https://github.com/pdemeulenaer/mlflow-image to produce such, or simply use the DockerHub image pdemeulenaer/mlflow-server:537
 
-- Postgres: postgres:11
+- **Postgres**: postgres:11
 
-- Minio: minio/minio:RELEASE.2020-07-27T18-37-02Z . Although 1-year old, fits well. For more recent images, need to change logic. 
+- **Minio**: minio/minio:RELEASE.2020-07-27T18-37-02Z . Although 1-year old, fits well. For more recent images, need to change logic. 
 
 # How to deploy MLflow on Openshift?
 
 Needed commands:
 
+First: login into your openshift cluster. I did use the RedHat Openshift Sandbox (https://developers.redhat.com/developer-sandbox, free, 2 weeks availability, renewable), like this:
+
 $ oc login --token=sha256~some_token --server=some-os4-server:port
+
+Then, in the k8s folder, execute the Postgres manifest:
 
 $ kubectl apply -f mlflow_postgres.yaml
 
     configmap/mlflow-postgres-config created
     statefulset.apps/mlflow-postgres created
     service/mlflow-postgres-service created
+
+Then execute the Minio manifest:    
 
 $ kubectl apply -f mlflow_minio.yaml 
 
@@ -47,17 +53,19 @@ $ kubectl apply -f mlflow_minio.yaml
     ingress.networking.k8s.io/mlflow-minio-ingress created
     persistentvolumeclaim/mlflow-pvc created
 
-$ oc get pods,services
+Extract the (internal) ip addresses of both Postgres and Minio services, from here:
+
+$ kubectl get pods,services
 
     NAME                                READY   STATUS              RESTARTS   AGE
     pod/mlflow-minio-64447c6687-bs9rm   0/1     ContainerCreating   0          12s
     pod/mlflow-postgres-0               0/1     ContainerCreating   0          44s
 
     NAME                              TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
-    service/mlflow-minio-service      NodePort   172.30.133.80   <none>        9000:31586/TCP   12s
-    service/mlflow-postgres-service   NodePort   172.30.173.63   <none>        5432:30221/TCP   44s
+    service/mlflow-minio-service      NodePort   **172.30.133.80**   <none>        9000:31586/TCP   12s
+    service/mlflow-postgres-service   NodePort   **172.30.173.63**   <none>        5432:30221/TCP   44s
 
-Here I need to change the CLUSTER-IP in the manifest mlflow_deployment.yaml for minio and postgres adresses. Manual step so far...
+Here I need to use these ip addresses to include them in the manifest mlflow_deployment.yaml for minio and postgres adresses. Manual step so far... (still trying to figure out how to automate that)
 
 $ kubectl apply -f mlflow_deployment.yaml 
 
