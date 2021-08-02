@@ -5,6 +5,7 @@ Adapted from https://towardsdatascience.com/mlflow-part-2-deploying-a-tracking-s
 
 ## Folder structure & pre-requisites
 
+* Folder structure:
     .
     ├── Dockerfile
     ├── example
@@ -17,7 +18,13 @@ Adapted from https://towardsdatascience.com/mlflow-part-2-deploying-a-tracking-s
     │   └── mlflow_postgres.yaml
     └── README.md
 
-As we will need a MLflow docker image in the mlflow_deployment.yaml manifest, look at  https://github.com/pdemeulenaer/mlflow-image to produce such, or simply use the DockerHub image pdemeulenaer/mlflow-server:537
+* Needed images:
+
+- MLflow: As we will need a MLflow docker image in the mlflow_deployment.yaml manifest, look at  https://github.com/pdemeulenaer/mlflow-image to produce such, or simply use the DockerHub image pdemeulenaer/mlflow-server:537
+
+- Postgres: postgres:11
+
+- Minio: minio/minio:RELEASE.2020-07-27T18-37-02Z . Although 1-year old, fits well. For more recent images, need to change logic. 
 
 # How to deploy MLflow on Openshift?
 
@@ -63,6 +70,12 @@ Then for openshift we need to create a route:
 $ oc expose service/mlflow-service
 
     route.route.openshift.io/mlflow-service exposed
+
+Note for Openshift: while using the Openshift free sandbox, I could see that when deploying yaml manifests including images from DockerHub, sometimes I get errors "too many requests", so as if there would be a limit of pulling images. Usually waiting a bit between 2 deployments allowed to clear the issue. But when the issue persists (sometimes it does), a way around would be to import the images within Openshift container registry, for example like this, for the minio image: 
+
+$ oc import-image docker.io/minio/minio –confirm
+
+In the log message following such command is the full address of the image within Openshift container registry.
 
 # How to deploy MLflow on Minikube?
 
