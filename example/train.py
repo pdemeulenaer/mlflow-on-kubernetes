@@ -11,13 +11,14 @@ import mlflow.sklearn
 # PROJECT SETUP
 # ------------------------------------------------------------------------------
 # Setting the MLflow tracking server
-mlflow.set_tracking_uri('http://mlflow-server.local')
-#mlflow.set_tracking_uri('http://mlflow-service-pdemeulenaer-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/')
+#mlflow.set_tracking_uri('http://mlflow-server.local')
+mlflow.set_tracking_uri('http://mlflow-service-pdemeulenaer-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/')
 
 
 
 # Setting the requried environment variables
-os.environ['MLFLOW_S3_ENDPOINT_URL'] = 'http://mlflow-minio.local' #'http://mlflow-minio.local' #'http://mlflow-minio-service-pdemeulenaer-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/minio/' #'http://mlflow-minio.local/'
+#os.environ['MLFLOW_S3_ENDPOINT_URL'] = 'http://mlflow-minio.local' #'http://mlflow-minio-service-pdemeulenaer-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/minio/' #'http://mlflow-minio.local/'
+os.environ['MLFLOW_S3_ENDPOINT_URL'] = 'http://mlflow-minio-service-pdemeulenaer-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com/' #'http://mlflow-minio.local/'
 os.environ['AWS_ACCESS_KEY_ID'] = 'minioadmin' #'minio'
 os.environ['AWS_SECRET_ACCESS_KEY'] = 'minioadmin' #'minio123'
 
