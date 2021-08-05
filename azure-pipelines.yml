@@ -44,3 +44,12 @@ stages:
         cmd: 'oc get deploy'
         uselocalOc: true
       displayName: 'Connect to Openshift'
+
+    - task: oc-cmd@2
+      inputs:
+        connectionType: 'OpenShift Connection Service'
+        openshiftService: 'openshift_connect'
+        cmd: 'bidule=$(oc describe service/mlflow-minio-service | grep IP:) | prefix='IP: ' | echo ${bidule#$prefix}'
+        uselocalOc: true
+      displayName: 'Connect to Openshift'
+
