@@ -1,0 +1,46 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+  - main
+  
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+    # - task: Docker@2
+    #   inputs:
+    #     containerRegistry: 'dockerhub-connection'
+    #     repository: 'pdemeulenaer/mlflow-server'
+    #     command: 'buildAndPush'
+    #     Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your commands here
+          
+          ls
+          cat $(Build.SourcesDirectory)/Dockerfile
+
+    - task: oc-cmd@2
+      inputs:
+        connectionType: 'OpenShift Connection Service'
+        openshiftService: 'openshift_connect'
+        cmd: 'oc get deploy'
+        uselocalOc: true
+      displayName: 'Connect to Openshift'
