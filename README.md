@@ -25,7 +25,7 @@ Needed images:
 
 - **Postgres**: postgres:11
 
-- **Minio**: minio/minio:RELEASE.2020-07-27T18-37-02Z . Although 1-year old, fits well. For more recent images, need to change logic. 
+- **Minio**: minio/minio:RELEASE.2020-07-27T18-37-02Z . Although 1-year old, but fits well so far. For more recent images, need to change logic. 
 
 # How to deploy MLflow on Openshift?
 
@@ -79,6 +79,12 @@ Then for openshift we need to create a route:
 $ oc expose service/mlflow-service
 
     route.route.openshift.io/mlflow-service exposed
+
+As we would also need to access the Minio storage from python code when logging models to MLflow, we create a route to the Minio: 
+
+$ oc expose service/mlflow-minio-service
+
+    route.route.openshift.io/mlflow-minio-service exposed
 
 Note for Openshift: while using the Openshift free sandbox, I could see that when deploying yaml manifests including images from DockerHub, sometimes I get errors "too many requests", so as if there would be a limit of pulling images. Usually waiting a bit between 2 deployments allowed to clear the issue. But when the issue persists (sometimes it does), a way around would be to import the images within Openshift container registry, for example like this, for the minio image: 
 
