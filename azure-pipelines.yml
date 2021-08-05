@@ -49,7 +49,7 @@ stages:
       inputs:
         connectionType: 'OpenShift Connection Service'
         openshiftService: 'openshift_connect'
-        cmd: 'bidule=$(oc describe service/mlflow-minio-service | grep IP:) | prefix='IP: ' | echo ${bidule#$prefix}'
+        cmd: 'bidule=$(oc describe service/mlflow-minio-service | grep IP:) | prefix="IP: " | echo ${bidule#$prefix}'
         uselocalOc: true
       displayName: 'Connect to Openshift'
 
