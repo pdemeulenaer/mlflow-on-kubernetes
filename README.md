@@ -108,3 +108,14 @@ Then we modify the /etc/hosts file (following https://towardsdatascience.com/mlf
 
     192.168.99.104 mlflow-server.local mlflow-minio.local
 
+# How to deploy MLflow on AKS?
+
+An easy way of deploying in AKS is to use the built-in Azure LoadBalancer in the services of Minio and MLflow deployment manifests (and comment out the Ingress parts). This is not very production friendly, as there is no DNS name per se, but already good enough for testing the functionality. The Minio and MLflow deployments are then available at:
+
+http://20.76.152.86:9000/minio/mlflow (provided that 20.76.152.86 is the external ip of the deployement)
+
+http://20.76.192.95:5000/ (provided that 20.76.192.95 is the external ip of the deployement)
+
+The external IP's are found by 
+
+$ kubectl get svc
