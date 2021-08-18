@@ -1,7 +1,6 @@
-# mlflow-on-kubernetes
-Deploying MLflow on Minikube and Openshift 4
+# Deploying MLflow on Minikube, Openshift 4, and Azure Kubernetes Service
 
-Adapted from https://towardsdatascience.com/mlflow-part-2-deploying-a-tracking-server-to-minikube-a2d6671e6455 for Openshift
+Adapted from https://towardsdatascience.com/mlflow-part-2-deploying-a-tracking-server-to-minikube-a2d6671e6455 
 
 ## Folder structure & pre-requisites
 
