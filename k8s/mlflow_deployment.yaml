@@ -20,12 +20,12 @@ spec:
         args:
         - --host=0.0.0.0
         - --port=5000
-        - --backend-store-uri=postgresql://mlflow_user:mlflow_pwd@10.107.203.184:5432/mlflow_db
+        - --backend-store-uri=postgresql://mlflow_user:mlflow_pwd@10.99.198.228:5432/mlflow_db
         - --default-artifact-root=s3://mlflow/
         - --workers=2
         env:
         - name: MLFLOW_S3_ENDPOINT_URL
-          value: http://10.109.86.100:9000/ #http://mlflow-minio.local:9000/
+          value: http://10.101.235.127:9000/ #http://mlflow-minio.local:9000/
         - name: AWS_ACCESS_KEY_ID
           value: "minioadmin" #"minio"
         - name: AWS_SECRET_ACCESS_KEY
@@ -40,6 +40,19 @@ spec:
           requests:
             cpu: "500m"
 ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: mlflow-service
+# spec:
+#   type: LoadBalancer
+#   ports:
+#     - port: 5000
+#       targetPort: 5000
+#       protocol: TCP
+#       name: http
+#   selector:
+#     app: mlflow-deployment
 apiVersion: v1
 kind: Service
 metadata:
@@ -54,7 +67,7 @@ spec:
   selector:
     app: mlflow-deployment
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mlflow-ingress
@@ -63,10 +76,14 @@ metadata:
     nginx.ingress.kubernetes.il/add-base-url: "true"
 spec:
   rules:
-  - host: mlflow-server.local
+  - host: mlflow-server.local           # A FQDN that describes the host where that rule should be applied
     http:
-      paths:
-        - backend:
-            serviceName: mlflow-service
-            servicePort: 5000
+      paths:                            # A list of paths and handlers for that host
+        # - path: /site # Which path is this rule referring to
+        - backend:                      # How the ingress will handle the requests
+            service:
+              name: mlflow-service # Which service the request will be forwarded to
+              port:
+                number: 5000           # Which port in that service
           path: /
+          pathType: Prefix

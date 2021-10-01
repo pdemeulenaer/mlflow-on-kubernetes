@@ -5,10 +5,10 @@ metadata:
   labels:
     app: mlflow-postgres
 data:
-  # POSTGRES_DB: mlflow_db         # for image postgres:11 on minikube
-  # POSTGRES_USER: mlflow_user     # for image postgres:11 on minikube
-  # POSTGRES_PASSWORD: mlflow_pwd  # for image postgres:11 on minikube
-  # PGDATA: /var/lib/postgresql/mlflow/data # for image postgres:11 on minikube
+  POSTGRES_DB: mlflow_db         # for image postgres:11 on minikube
+  POSTGRES_USER: mlflow_user     # for image postgres:11 on minikube
+  POSTGRES_PASSWORD: mlflow_pwd  # for image postgres:11 on minikube
+  PGDATA: /var/lib/postgresql/mlflow/data # for image postgres:11 on minikube
   POSTGRESQL_DATABASE: mlflow_db            # for image from openshift
   POSTGRESQL_USER: mlflow_user              # for image from openshift
   POSTGRESQL_PASSWORD: mlflow_pwd           # for image from openshift
