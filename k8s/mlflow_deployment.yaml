@@ -20,12 +20,12 @@ spec:
         args:
         - --host=0.0.0.0
         - --port=5000
-        - --backend-store-uri=postgresql://mlflow_user:mlflow_pwd@10.99.198.228:5432/mlflow_db
+        - --backend-store-uri=postgresql://mlflow_user:mlflow_pwd@mlflow-postgres-service:5432/mlflow_db #10.101.82.67:5432/mlflow_db
         - --default-artifact-root=s3://mlflow/
         - --workers=2
         env:
         - name: MLFLOW_S3_ENDPOINT_URL
-          value: http://10.101.235.127:9000/ #http://mlflow-minio.local:9000/
+          value: http://mlflow-minio-service:9000/  #http://10.107.116.50:9000/ #http://mlflow-minio.local:9000/
         - name: AWS_ACCESS_KEY_ID
           value: "minioadmin" #"minio"
         - name: AWS_SECRET_ACCESS_KEY
